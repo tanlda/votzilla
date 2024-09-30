@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  add:
+    silent: true
+    cmds:
+      - cmd: pnpm dlx shadcn@latest add {{ .CLI_ARGS }}

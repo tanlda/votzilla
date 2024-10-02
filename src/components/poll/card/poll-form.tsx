@@ -1,10 +1,8 @@
-'use client'
-
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-import { Poll, PollResults, PollSelf } from '@/types/poll'
+import { Poll, PollResults, PollSelf, PollSelfOption } from '@/types/poll'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PollOptions } from '@/components/poll/card/poll-options'
@@ -14,18 +12,29 @@ import { Form } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { http } from '@/services/api'
+import { VoteType, VoteResponse } from '@/types/vote'
+
 type Props = {
   className?: string
   children?: React.ReactNode
   poll: Poll
-  self: PollSelf
+  self?: PollSelf
   results: PollResults
+  onSubmitVote: (options: PollSelfOption[]) => void
 }
 
 const FormSchema = z.object({
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'You have to select at least one option.',
-  }),
+  options: z
+    .array(
+      z.object({
+        id: z.string(),
+        value: z.number(),
+      }),
+    )
+    .refine((value) => value.some((item) => item), {
+      message: 'You have to select at least one option.',
+    }),
 })
 
 export const PollForm: NextComponentType<object, object, Props> = ({
@@ -33,16 +42,30 @@ export const PollForm: NextComponentType<object, object, Props> = ({
   poll,
   self,
   results,
+  onSubmitVote,
 }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      items: [],
+      options: self?.options || [],
     },
   })
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data)
+    const response = await http.post<VoteResponse>(`/votes/${poll.id}/vote`, {
+      body: {
+        type: VoteType.ADD,
+        votes: data.options,
+        tags: ['anonymous'], // TODO: user.tags
+      },
+      config: {
+        baseURL: 'http://localhost:8010',
+      },
+    })
+
+    if (response.ok) {
+      onSubmitVote(data.options)
+    }
   }
 
   return (

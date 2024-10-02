@@ -3,14 +3,14 @@
 import { QueryFunctionContext, useQuery } from '@tanstack/react-query'
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Room, Poll, Response, PollResults } from '@/types'
-import { PollHeader } from '@/components/poll/card/poll-header'
-import { PollContent } from '@/components/poll/card/poll-content'
-import { Card } from '@/components/ui/card'
 import { http } from '@/services/api'
-import { PollSelf } from '@/types/poll'
+import { Room, Poll, Response, PollResults as PollResults, PollSelf, PollSelfOption } from '@/types'
+import { PollHeader } from '@/components/poll/card/poll-header'
+import { PollPanel } from '@/components/poll/card/poll-panel'
+import { PollForm } from '@/components/poll/card/poll-form'
+import { Card, CardContent } from '@/components/ui/card'
 
 type Props = {
   className?: string
@@ -31,12 +31,18 @@ const getPollResults = async ({ queryKey }: QueryFunctionContext) => {
   return results
 }
 
-export const PollCard: NextComponentType<object, object, Props> = ({ className, room, poll }) => {
-  const { data: results } = useQuery({
+export const PollCard: NextComponentType<object, object, Props> = ({
+  className,
+  children,
+  room,
+  poll,
+}) => {
+  const { data: results, refetch } = useQuery({
     queryKey: [room.id, poll.id],
     queryFn: getPollResults,
     enabled: !!room.id,
-    refetchInterval: 60 * 1000,
+    refetchInterval: 30 * 1000,
+    staleTime: 0,
     initialData: () => ({
       id: poll.id,
       key: '',
@@ -50,15 +56,37 @@ export const PollCard: NextComponentType<object, object, Props> = ({ className, 
     }),
   })
 
-  const self: PollSelf = {
-    id: poll.id,
-    options: [],
+  const [self, setSelf] = useState<PollSelf | undefined>(undefined)
+
+  const handleSubmitVote = (options: PollSelfOption[]) => {
+    setSelf((prev) => {
+      if (prev) return { ...prev, options }
+      if (poll.self) return { ...poll.self }
+    })
+
+    refetch().finally()
   }
 
   return (
     <Card className={cn(className, 'min-w-[768px]')}>
       <PollHeader poll={poll} />
-      <PollContent poll={poll} self={self} results={results} />
+      <CardContent
+        className={cn(
+          className,
+          'relative mb-4 flex items-start justify-between gap-x-4 px-4 py-0',
+        )}
+      >
+        <PollForm
+          className="grow"
+          poll={poll}
+          results={results}
+          self={self || poll.self}
+          onSubmitVote={handleSubmitVote}
+        >
+          {children}
+        </PollForm>
+        <PollPanel poll={poll} results={results} />
+      </CardContent>
     </Card>
   )
 }

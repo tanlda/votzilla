@@ -148,7 +148,9 @@ export class Http {
     const headers: Record<string, unknown> = {}
     const params: Record<string, unknown> = {}
 
-    if (this.secrets?.getAccessToken()) {
+    console.log(this.secrets.getAccessToken())
+
+    if (this.secrets.getAccessToken()) {
       headers['Authorization'] = `Bearer ${this.secrets.getAccessToken()}`
     }
 

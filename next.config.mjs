@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: false,
   env: {
     API_URL: process.env.API_URL || 'https://api.votzilla.com',
-    COOKIE_ACCESS_TOKEN: '_t',
+    COOKIE_ACCESS_TOKEN: '_a',
     COOKIE_REFRESH_TOKEN: '_r',
   },
   images: {},

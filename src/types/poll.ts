@@ -29,6 +29,8 @@ export type Poll = {
 
   options: Option[]
   tags: Tag[]
+
+  self?: PollSelf
 }
 
 export type PollResultsOption = {

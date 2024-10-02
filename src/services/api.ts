@@ -14,4 +14,6 @@ const accessToken = getCookie(process.env.COOKIE_ACCESS_TOKEN as string) || ''
 const refreshToken = getCookie(process.env.COOKIE_REFRESH_TOKEN as string) || ''
 const secrets = new Secrets(accessToken, refreshToken)
 
+console.log(secrets.getAccessToken())
+
 export const http = new Http(client, secrets)

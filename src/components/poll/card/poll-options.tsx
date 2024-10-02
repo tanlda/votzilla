@@ -44,7 +44,7 @@ type Props = {
   children?: React.ReactNode
   form: UseFormReturn<any>
   poll: Poll
-  self: PollSelf
+  self?: PollSelf
   results: PollResults
 }
 
@@ -63,7 +63,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
     mapping[option.id] = { poll: option } as Value
   }
 
-  for (const option of self.options) {
+  for (const option of self?.options || []) {
     mapping[option.id].self = option
   }
 
@@ -74,9 +74,8 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
   const chartData = poll.options.map((option) => ({
     title: mapping[option.id].poll.title,
     count: mapping[option.id].result?.vote_count || 0,
+    placeholder: 1,
   }))
-
-  console.log(mapping)
 
   return (
     <div className={cn(className, 'flex items-center justify-between')}>
@@ -126,6 +125,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) => value.slice(0, 3)}
+              includeHidden
               hide
             />
             <XAxis dataKey="count" type="number" hide />
@@ -138,13 +138,13 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
               <LabelList
                 dataKey="title"
                 position="insideLeft"
-                offset={8}
-                className="fill-[--color-label]"
+                offset={28}
+                // className="fill-[--color-label]"
                 fontSize={12}
               />
               <LabelList
                 dataKey="count"
-                position="right"
+                position="insideLeft"
                 offset={8}
                 className="fill-foreground"
                 fontSize={12}

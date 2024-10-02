@@ -1,5 +1,6 @@
 import type { AxiosInstance, AxiosError, AxiosRequestConfig } from 'axios'
 import merge from 'lodash/merge'
+import trim from 'lodash/trim'
 
 export interface BaseResponse<T = unknown> {
   ok: boolean
@@ -31,8 +32,8 @@ export class Http {
   private requestQueue: Array<() => void> = []
 
   constructor(
-    public readonly secrets: Secrets,
-    private readonly axiosClient: AxiosInstance,
+    private readonly client: AxiosInstance,
+    private readonly secrets: Secrets,
   ) {
     this.setupInterceptors()
   }
@@ -47,7 +48,7 @@ export class Http {
   }
 
   private setupInterceptors() {
-    this.axiosClient.interceptors.request.use(async (config) => {
+    this.client.interceptors.request.use(async (config) => {
       if (this.awaitingRefresh) {
         // Return a new promise that resolves when the refresh is complete
         // and then retries the request.
@@ -58,7 +59,7 @@ export class Http {
       return config
     })
 
-    this.axiosClient.interceptors.response.use(
+    this.client.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
         if (error.response?.status === 498) {
@@ -81,7 +82,7 @@ export class Http {
           return new Promise((resolve, reject) => {
             this.requestQueue.push(() => {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              this.axiosClient.request(error.config!).then(resolve).catch(reject)
+              this.client.request(error.config!).then(resolve).catch(reject)
             })
           })
         }
@@ -98,7 +99,7 @@ export class Http {
   }
 
   async post<T>(endpoint: Endpoint, options: HttpOptions): Promise<T> {
-    const { data } = await this.axiosClient.post<T>(
+    const { data } = await this.client.post<T>(
       this.createCallUrl(endpoint, options.version),
       options.body,
       this.authorizeConfig(options.config),
@@ -107,7 +108,7 @@ export class Http {
   }
 
   async get<T>(endpoint: Endpoint, options?: HttpOptions): Promise<T> {
-    const { data } = await this.axiosClient.get<T>(
+    const { data } = await this.client.get<T>(
       this.createCallUrl(endpoint, options?.version),
       this.authorizeConfig(options?.config),
     )
@@ -115,7 +116,7 @@ export class Http {
   }
 
   async delete<T>(endpoint: Endpoint, options?: HttpOptions): Promise<T> {
-    const { data } = await this.axiosClient.delete<T>(
+    const { data } = await this.client.delete<T>(
       this.createCallUrl(endpoint, options?.version),
       this.authorizeConfig(options?.config),
     )
@@ -123,7 +124,7 @@ export class Http {
   }
 
   async patch<T>(endpoint: Endpoint, options: HttpOptions): Promise<T> {
-    const { data } = await this.axiosClient.patch<T>(
+    const { data } = await this.client.patch<T>(
       this.createCallUrl(endpoint, options.version),
       options.body,
       this.authorizeConfig(options.config),
@@ -140,7 +141,7 @@ export class Http {
   }
 
   private createCallUrl(endpoint: Endpoint, version: ApiVersion = ApiVersion.V1): string {
-    return `${version}${endpoint}` // TODO: Add support for dynamic endpoints
+    return `${version}${trim(endpoint, '/')}` // TODO: Add support for dynamic endpoints
   }
 
   private authorizeConfig(config?: AxiosRequestConfig<unknown>): AxiosRequestConfig<unknown> {

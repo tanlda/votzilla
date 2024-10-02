@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
@@ -17,12 +17,13 @@ type Props = {
 
 export const PollMenu: NextComponentType<object, object, Props> = ({
   className,
-  children,
   onMenu = noop,
 }) => {
   return (
-    <div className={cn(className)} onClick={() => onMenu('menu')}>
-      {children}
+    <div className={cn(className, 'flex')} onClick={() => onMenu('menu')}>
+      <div className="flex-center">
+        <div>...</div>
+      </div>
     </div>
   )
 }

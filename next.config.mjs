@@ -6,7 +6,11 @@ const nextConfig = {
     localeDetection: false,
   },
   reactStrictMode: false,
-  env: {},
+  env: {
+    API_URL: process.env.API_URL || 'https://api.votzilla.com',
+    COOKIE_ACCESS_TOKEN: '_t',
+    COOKIE_REFRESH_TOKEN: '_r',
+  },
   images: {},
 }
 

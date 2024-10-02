@@ -1,14 +1,15 @@
-'use-client'
+'use client'
 
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-import { PollTitle } from '@/components/poll/poll-title'
-import { PollMeta } from '@/components/poll/poll-meta'
-import { PollMenu } from '@/components/poll/poll-menu'
-
 import { Poll } from '@/types/poll'
+import { PollTitle } from '@/components/poll/card/poll-title'
+import { PollMeta } from '@/components/poll/card/poll-meta'
+import { PollMenu } from '@/components/poll/card/poll-menu'
+
+import { CardHeader } from '@/components/ui/card'
 
 type Props = {
   className?: string
@@ -22,12 +23,14 @@ export const PollHeader: NextComponentType<object, object, Props> = ({ className
   }
 
   return (
-    <div className={cn(className, 'flex items-center justify-between')}>
+    <CardHeader
+      className={cn(className, 'flex h-12 flex-row items-center justify-between px-4 py-2')}
+    >
       <PollTitle poll={poll} />
       <div className="flex items-center">
         <PollMeta status={poll.status} />
         <PollMenu poll={poll} onMenu={handleMenu} />
       </div>
-    </div>
+    </CardHeader>
   )
 }

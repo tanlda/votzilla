@@ -30,3 +30,35 @@ export type Poll = {
   options: Option[]
   tags: Tag[]
 }
+
+export type PollResultsOption = {
+  id: string
+  vote_count: number
+}
+
+export type PollResultsTag = {
+  name: string
+  vote_count: number
+}
+
+export type PollResults = {
+  id: string
+  key: string
+  version: string
+  vote_count: number
+  participant_count: number
+  created_at: number
+  updated_at: number
+  options: PollResultsOption[]
+  tags: PollResultsTag[]
+}
+
+export type PollSelfOption = {
+  id: string
+  value: number
+}
+
+export type PollSelf = {
+  id: string
+  options: PollSelfOption[]
+}

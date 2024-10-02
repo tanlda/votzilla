@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'

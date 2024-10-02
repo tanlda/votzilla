@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
-import './globals.css'
+import './globals.scss'
 
 import { Provider } from '@/app/provider'
 import { Header } from '@/components/app/header'
@@ -20,17 +20,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <Provider>
-      <html lang="vi">
-        <body className={cn('antialiased')}>
+    <html lang="vi">
+      <body className={cn('antialiased')}>
+        <Provider>
           <Header />
           <Main className="flex items-start">
             <Sidebar />
             <Content className="px-8">{children}</Content>
           </Main>
           <Toaster />
-        </body>
-      </html>
-    </Provider>
+        </Provider>
+      </body>
+    </html>
   )
 }

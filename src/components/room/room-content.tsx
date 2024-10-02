@@ -6,9 +6,9 @@ import React from 'react'
 
 type Props = {
   className?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
-export const Content: NextComponentType<object, object, Props> = ({ className, children }) => {
+export const RoomContent: NextComponentType<object, object, Props> = ({ className, children }) => {
   return <div className={cn(className)}>{children}</div>
 }

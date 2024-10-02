@@ -4,18 +4,18 @@ import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-import { Option } from '@/types/poll'
+import { Poll } from '@/types/poll'
 
 type Props = {
   className?: string
   children?: React.ReactNode
-  option: Option
+  poll: Poll
 }
 
-export const PollOption: NextComponentType<object, object, Props> = ({ className, option }) => {
+export const PollPieResults: NextComponentType<object, object, Props> = ({ className }) => {
   return (
     <div className={cn(className)}>
-      <div>{option.title}</div>
+      <div className="flex-center h-28 w-28 rounded-full bg-black/20"></div>
     </div>
   )
 }

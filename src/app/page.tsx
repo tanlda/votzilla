@@ -1,11 +1,9 @@
-import { Button } from '@/components/ui/button'
+import Auth from '@/app/auth'
 import { PollList } from '@/components/poll/list/poll-list'
 import { RoomView } from '@/components/room/room-view'
-
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
-
+import { Pagination, Poll, Response, Room, RoomStatus } from '@/types'
+import { QueryClient } from '@tanstack/react-query'
 import { http } from '@/services/api'
-import { Response, Poll, Room, RoomStatus, Pagination } from '@/types'
 
 interface ListPollsResponse extends Response {
   polls: Poll[]
@@ -13,7 +11,7 @@ interface ListPollsResponse extends Response {
 }
 
 const fetchPolls = async ({ queryKey }: { queryKey: string[] }) => {
-  const [room] = queryKey
+  const room = queryKey[1]
   const { polls } = await http.get<ListPollsResponse>(`/rooms/${room}/polls`)
   return polls
 }
@@ -31,19 +29,15 @@ export default async function Home() {
   }
 
   const queryClient = new QueryClient()
-
-  await queryClient.prefetchQuery({ queryKey: [room.name], queryFn: fetchPolls })
+  await queryClient.prefetchQuery({ queryKey: ['rooms', room.name], queryFn: fetchPolls })
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <Auth>
       <div>
-        <Button disabled>Vote</Button>
-        <div className="mt-4">
-          <RoomView>
-            <PollList room={room} />
-          </RoomView>
-        </div>
+        <RoomView>
+          <PollList room={room} />
+        </RoomView>
       </div>
-    </HydrationBoundary>
+    </Auth>
   )
 }

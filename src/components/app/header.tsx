@@ -1,5 +1,4 @@
 import { NextComponentType } from 'next'
-// import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 import { Logo } from '@/components/app/logo'
@@ -12,20 +11,22 @@ type Props = {
 }
 
 export const Header: NextComponentType<object, object, Props> = ({ className }) => {
-  // const router = useRouter()
-
   return (
     <div
       className={cn(
         className,
-        'relative z-[10] flex h-14 w-screen items-center justify-between px-4 text-black',
+        'relative z-[10] flex w-screen items-center justify-start border-b border-neutral-300 px-4',
       )}
     >
-      <Logo />
-      <Search />
-      <div className="flex items-center justify-between">
-        <Notification />
-        <UserAvatar />
+      <Logo className="flex h-full min-w-[240px] items-center justify-start border-r border-neutral-300 px-2" />
+
+      <div className="flex w-full items-center justify-between pl-6 pr-2">
+        <Search className="mr-auto" />
+
+        <div className="flex items-center justify-between gap-x-4">
+          <Notification />
+          <UserAvatar />
+        </div>
       </div>
     </div>
   )

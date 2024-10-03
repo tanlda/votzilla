@@ -50,6 +50,18 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        neutral: {
+          DEFAULT: '#71717A',
+          0: '#FFFFFF',
+          100: '#F4F4F5',
+          200: '#E4E4E7',
+          300: '#D4D4D8',
+          400: '#A1A1AA',
+          500: '#71717A',
+          600: '#27272A',
+          700: '#18181B',
+          800: '#09090B',
+        },
         chemic: {
           DEFAULT: '#ADFA1D',
           50: '#EEFED1',
@@ -69,6 +81,12 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      width: {
+        7.5: '1.875rem',
+      },
+      height: {
+        7.5: '1.875rem',
       },
     },
   },

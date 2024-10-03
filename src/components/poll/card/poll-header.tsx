@@ -23,9 +23,7 @@ export const PollHeader: NextComponentType<object, object, Props> = ({ className
   }
 
   return (
-    <CardHeader
-      className={cn(className, 'flex h-12 flex-row items-center justify-between px-4 py-2')}
-    >
+    <CardHeader className={cn(className, 'flex flex-row items-center justify-between p-0')}>
       <PollTitle poll={poll} />
       <div className="flex items-center">
         <PollMeta status={poll.status} />

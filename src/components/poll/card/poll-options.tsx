@@ -63,18 +63,17 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
     mapping[option.id] = { poll: option } as Value
   }
 
-  for (const option of self?.options || []) {
-    mapping[option.id].self = option
-  }
-
   for (const result of results.options) {
     mapping[result.id].result = result
+  }
+
+  for (const option of self?.options || []) {
+    mapping[option.id].self = option
   }
 
   const chartData = poll.options.map((option) => ({
     title: mapping[option.id].poll.title,
     count: mapping[option.id].result?.vote_count || 0,
-    placeholder: 1,
   }))
 
   return (

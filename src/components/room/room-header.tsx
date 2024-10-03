@@ -9,6 +9,10 @@ type Props = {
   children?: React.ReactNode
 }
 
-export const RoomHeader: NextComponentType<object, object, Props> = ({ className, children }) => {
-  return <div className={cn(className)}>{children}</div>
+export const RoomHeader: NextComponentType<object, object, Props> = ({ className }) => {
+  return (
+    <div className={cn(className)}>
+      <div>Room Header</div>
+    </div>
+  )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import { cn } from '@/lib/utils'
 import { NextComponentType } from 'next'
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query'
@@ -28,7 +28,7 @@ const fetchPollsInfinity = async ({ queryKey, pageParam }: QueryFunctionContext)
 }
 
 export const PollList: NextComponentType<object, object, Props> = ({ className, room }) => {
-  const { data, status } = useInfiniteQuery({
+  const { data } = useInfiniteQuery({
     queryKey: [room.name, 'https://github.com/TanStack/query/discussions/7455'],
     queryFn: fetchPollsInfinity,
     initialPageParam: '',
@@ -40,15 +40,16 @@ export const PollList: NextComponentType<object, object, Props> = ({ className, 
   // </VirtualItem>
 
   return (
-    <div className={cn(className)}>
-      <div>{status}</div>
-
-      <div className="flex flex-col gap-y-4">
-        {data &&
-          data.pages.map((polls) =>
-            polls.map((poll) => <PollCard key={poll.id} room={room} poll={poll}></PollCard>),
-          )}
-      </div>
+    <div className={cn(className, 'flex flex-col gap-y-6')}>
+      {data &&
+        data.pages.map((polls) =>
+          polls.map((poll, index) => (
+            <Fragment key={poll.id + '-fr'}>
+              {!!index && <hr key={poll.id + '-hr'} />}
+              <PollCard key={poll.id} room={room} poll={poll}></PollCard>
+            </Fragment>
+          )),
+        )}
     </div>
   )
 }

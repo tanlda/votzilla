@@ -23,10 +23,10 @@ export default function RootLayout({
     <html lang="vi">
       <body className={cn('antialiased')}>
         <Provider>
-          <Header />
-          <Main className="flex items-start">
+          <Header className="h-14" />
+          <Main className="h-[calc(100vh - 56px)] flex items-start">
             <Sidebar />
-            <Content className="px-8">{children}</Content>
+            <Content className="p-6">{children}</Content>
           </Main>
           <Toaster />
         </Provider>

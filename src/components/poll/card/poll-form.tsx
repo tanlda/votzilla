@@ -14,6 +14,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { http } from '@/services/api'
 import { VoteType, VoteResponse } from '@/types/vote'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip.tsx'
 
 type Props = {
   className?: string
@@ -68,8 +76,10 @@ export const PollForm: NextComponentType<object, object, Props> = ({
     }
   }
 
+  const tags = (results?.tags || []).toSorted((a, b) => b.vote_count - a.vote_count)
+
   return (
-    <div className={cn(className, 'flex h-full flex-col justify-start')}>
+    <div className={cn(className, 'flex h-full flex-col justify-start gap-y-4')}>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start gap-x-2">
           {poll.tags.map((tag) => (
@@ -78,20 +88,46 @@ export const PollForm: NextComponentType<object, object, Props> = ({
             </Badge>
           ))}
         </div>
-        <div className="flex h-6 items-center justify-end">
-          <div>Sort</div>
-        </div>
+        {/*<div className="flex h-6 items-center justify-end">Sort | Filter</div>*/}
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex grow flex-col justify-start py-2">
+          <div className="mb-4 flex grow flex-col justify-start">
             <PollOptions form={form} poll={poll} self={self} results={results} />
           </div>
 
+          <div className="mb-2 flex min-h-6 flex-wrap items-center justify-start gap-2">
+            {tags.map((tag) => (
+              <Button key={tag.name} variant="secondary" size="sm" className="h-6 px-2 py-2">
+                <span>
+                  {tag.name} | {tag.vote_count}
+                </span>
+              </Button>
+            ))}
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipContent side="right">
+                  <p>Here are the top 5 most popular tags among voters.</p>
+                </TooltipContent>
+                <TooltipTrigger asChild>
+                  <InfoCircledIcon className="cursor-pointer opacity-60" />
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
           <div className="bottom-0 left-4 mt-auto flex items-center justify-start gap-x-2">
-            <Button className="font-medium" type="submit">
+            <Button className="min-h-8 px-6 py-3 text-sm font-semibold" type="submit">
               Vote
+            </Button>
+            <Button
+              className="min-h-8 px-4 py-3 text-sm font-medium"
+              variant="secondary"
+              type="button"
+            >
+              Results
             </Button>
           </div>
         </form>

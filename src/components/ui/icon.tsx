@@ -23,6 +23,8 @@ import {
   User,
   Bell,
   X,
+  Radio,
+  EllipsisVertical,
 } from 'lucide-react'
 
 export { Icon } from 'lucide-react'
@@ -69,4 +71,6 @@ export const Icons = {
   ),
   Check: Check,
   X: X,
+  Live: Radio,
+  EllipsisVertical: EllipsisVertical,
 }

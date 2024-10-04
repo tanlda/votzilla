@@ -40,7 +40,7 @@ export const PollList: NextComponentType<object, object, Props> = ({ className, 
   // </VirtualItem>
 
   return (
-    <div className={cn(className, 'flex flex-col gap-y-6')}>
+    <div className={cn(className, 'flex w-full max-w-[864px] flex-col gap-y-6')}>
       {data &&
         data.pages.map((polls) =>
           polls.map((poll, index) => (

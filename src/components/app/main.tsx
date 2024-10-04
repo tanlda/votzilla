@@ -7,5 +7,9 @@ type Props = {
 }
 
 export const Main: NextComponentType<object, object, Props> = ({ className, children }) => {
-  return <main className={cn(className)}>{children}</main>
+  return (
+    <main className={cn(className)} style={{ height: 'calc(100vh - 56px)' }}>
+      {children}
+    </main>
+  )
 }

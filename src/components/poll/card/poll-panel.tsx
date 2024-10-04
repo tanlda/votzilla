@@ -26,26 +26,10 @@ export const PollPanel: NextComponentType<object, object, Props> = ({
     <div
       className={cn(
         className,
-        'flex min-w-64 max-w-52 flex-col items-center justify-start self-center pt-4',
+        'flex min-w-64 max-w-52 flex-col items-center justify-start self-center',
       )}
     >
       <PollPieResults poll={poll} results={results} />
-
-      <div className="mt-4 flex min-h-6 flex-wrap items-center justify-center gap-2">
-        {tags.map((tag) => (
-          <Button key={tag.name} variant="secondary" size="sm" className="h-6 px-2 py-2">
-            <span>
-              {tag.name} ({tag.vote_count})
-            </span>
-          </Button>
-        ))}
-      </div>
-
-      <div className="mt-4 flex items-center justify-between gap-x-2">
-        <Button variant="secondary" size="sm">
-          Hide results
-        </Button>
-      </div>
     </div>
   )
 }

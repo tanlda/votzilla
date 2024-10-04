@@ -9,6 +9,13 @@ import { Main } from '@/components/app/main'
 import { Sidebar } from '@/components/app/sidebar'
 import { Content } from '@/components/app/content'
 
+import { Inter } from '@next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter', // Use a CSS variable for easy access
+})
+
 export const metadata: Metadata = {
   title: 'Votzilla - The vote',
   description: 'Votzilla - The vote',
@@ -20,13 +27,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" className={inter.variable}>
       <body className={cn('antialiased')}>
         <Provider>
           <Header className="h-14" />
-          <Main className="h-[calc(100vh - 56px)] flex items-start">
+          <Main className="flex w-full items-start">
             <Sidebar />
-            <Content className="p-6">{children}</Content>
+            <Content className="w-full p-6">{children}</Content>
           </Main>
           <Toaster />
         </Provider>

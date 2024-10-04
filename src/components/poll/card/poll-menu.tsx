@@ -6,6 +6,7 @@ import React from 'react'
 import { doNothing as noop } from 'remeda'
 
 import { Poll } from '@/types/poll'
+import { Icons } from '@/components/ui/icon.tsx'
 
 type Props = {
   className?: string
@@ -21,9 +22,7 @@ export const PollMenu: NextComponentType<object, object, Props> = ({
 }) => {
   return (
     <div className={cn(className, 'flex')} onClick={() => onMenu('menu')}>
-      <div className="flex-center">
-        <div>...</div>
-      </div>
+      <Icons.EllipsisVertical size={16} />
     </div>
   )
 }

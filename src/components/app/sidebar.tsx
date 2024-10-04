@@ -2,6 +2,7 @@
 
 import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
+import { BookmarkIcon } from '@radix-ui/react-icons'
 
 type Props = {
   className?: string
@@ -18,9 +19,11 @@ export const Sidebar: NextComponentType<object, object, Props> = ({ className })
             key={room}
             className="flex min-h-8 cursor-pointer items-center justify-start gap-x-2 rounded-md p-2 hover:bg-neutral-100"
           >
-            <div className="w-7.5 h-7.5 flex-center rounded-full border border-neutral-800">C</div>
-            <div className="mr-auto text-left font-medium text-neutral-800">{room}</div>
-            <div>B</div>
+            <div className="flex-center h-6 w-6 rounded-full border border-neutral-800 text-xs">
+              R
+            </div>
+            <div className="text-md mr-auto text-left font-medium text-neutral-800">{room}</div>
+            <BookmarkIcon />
           </div>
         ))}
       </div>

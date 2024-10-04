@@ -12,7 +12,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { PieChart, Pie, Cell } from 'recharts'
+import { PieChart, Pie, Cell, LabelList, Label } from 'recharts'
+import { PersonIcon } from '@radix-ui/react-icons'
 
 const chartConfig = {
   visitors: {
@@ -69,22 +70,54 @@ export const PollPieResults: NextComponentType<object, object, Props> = ({
   const chartData = poll.options.map((option) => ({
     title: mapping[option.id].poll.title,
     name: mapping[option.id].poll.title,
-    count: mapping[option.id].result?.vote_count || 0,
+    value: mapping[option.id].result?.vote_count || 0,
   }))
 
   return (
-    <div className={cn(className)} style={{ width: 240, height: 240 }}>
-      <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[240px]">
-        <PieChart>
+    <div style={{ width: 240, height: 200 }} className={cn(className)}>
+      <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[220px]">
+        <PieChart className="-mb-6 -mt-10">
           <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
           <Pie
             data={chartData}
-            dataKey="count"
-            label
+            dataKey="value"
             startAngle={90 + 360}
             endAngle={90}
-            outerRadius="70%"
+            outerRadius="80%"
+            innerRadius={40}
           >
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                  return (
+                    <>
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) - 4}
+                          className="fill-foreground text-2xl font-bold"
+                        >
+                          {results.vote_count}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 12}
+                          className="fill-muted-foreground text-[10px]"
+                        >
+                          votes
+                        </tspan>
+                      </text>
+                    </>
+                  )
+                }
+              }}
+            />
+            <LabelList dataKey="title" className="fill-background" stroke="none" fontSize={12} />
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}

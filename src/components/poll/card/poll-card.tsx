@@ -38,13 +38,12 @@ export const PollCardInner: NextComponentType<object, object, Props> = ({
   }
 
   return (
-    <Card className={cn(className, 'min-w-[768px] px-4 pb-4 pt-3 shadow-none')}>
-      <PollHeader poll={poll} />
+    <Card
+      className={cn(className, 'w-full min-w-[768px] max-w-[864px] px-4 pb-4 pt-3 shadow-none')}
+    >
+      <PollHeader poll={poll} results={results} />
       <CardContent
-        className={cn(
-          className,
-          'relative mb-4 flex items-start justify-between gap-x-4 px-4 py-0',
-        )}
+        className={cn(className, 'relative flex items-start justify-between gap-x-4 px-0 py-0')}
       >
         <PollForm
           className="grow"

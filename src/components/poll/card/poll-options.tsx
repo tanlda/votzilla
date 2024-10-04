@@ -4,7 +4,7 @@ import { NextComponentType } from 'next'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, LabelList, Rectangle, XAxis, YAxis } from 'recharts'
 
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -24,20 +24,6 @@ import {
   PollSelf,
   PollSelfOption,
 } from '@/types/poll'
-
-const chartConfig = {
-  desktop: {
-    label: 'Desktop',
-    color: 'hsl(var(--chart-1))',
-  },
-  mobile: {
-    label: 'Mobile',
-    color: 'hsl(var(--chart-2))',
-  },
-  label: {
-    color: 'hsl(var(--background))',
-  },
-} satisfies ChartConfig
 
 type Props = {
   className?: string
@@ -76,16 +62,25 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
     count: mapping[option.id].result?.vote_count || 0,
   }))
 
+  const chartConfig = {
+    count: {
+      label: 'Total',
+      color: '',
+    },
+  }
+
+  const row = { width: 32, gap: 10, stroke: 1 }
+
   return (
     <div className={cn(className, 'flex items-center justify-between')}>
-      <div className="flex flex-grow flex-col justify-start py-2">
+      <div className="flex flex-col justify-start gap-y-2 pr-2">
         {poll.options.map((option) => (
           <FormField
             key={option.id}
             control={form.control}
             name="options"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-8 w-8">
                 <FormControl>
                   <Checkbox
                     id={option.id + ''}
@@ -95,6 +90,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
                         ? field.onChange(field.value.filter((o: Option) => o.id !== option.id))
                         : field.onChange([...field.value, { id: option.id, value: 1 }]) // TODO: value
                     }}
+                    className={cn('h-8 w-8')}
                   />
                 </FormControl>
               </FormItem>
@@ -106,15 +102,18 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
       <div className="grow" style={{}}>
         <ChartContainer
           config={chartConfig}
-          style={{ width: 400, height: poll.options.length * 48 }}
+          style={{
+            width: '90%',
+            height: poll.options.length * row.width + (poll.options.length - 1) * row.gap,
+          }}
         >
           <BarChart
             accessibilityLayer
             data={chartData}
             layout="vertical"
-            margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-            barCategoryGap={0}
-            maxBarSize={42}
+            margin={{ top: 0, right: 4, bottom: 0, left: 4 }}
+            maxBarSize={row.width * 3}
+            barSize={row.width}
             width={100}
           >
             <YAxis
@@ -133,19 +132,41 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
               animationDuration={200}
               isAnimationActive={false}
             />
-            <Bar dataKey="count" layout="vertical" fill="#CCCCCC" fontSize={12}>
+            <Bar
+              dataKey="count"
+              layout="vertical"
+              fontSize={12}
+              radius={4}
+              fill={'#F4F4F5'}
+              background={{ fill: 'none', stroke: '#D4D4D8', radius: 4 }}
+              style={{ stroke: '#D4D4D8', strokeWidth: 1 }}
+            >
               <LabelList
                 dataKey="title"
                 position="insideLeft"
-                offset={28}
-                // className="fill-[--color-label]"
+                className="font-medium"
+                offset={32}
                 fontSize={12}
+                content={({ index, x, y, value, height }) => {
+                  return (
+                    <text
+                      x={x}
+                      y={y}
+                      fontSize={12}
+                      dy={Number(height) / 2 + 4}
+                      dx={32 + Number(chartData[index!].count / 100)}
+                      className="font-medium"
+                    >
+                      {value}
+                    </text>
+                  )
+                }}
               />
               <LabelList
                 dataKey="count"
                 position="insideLeft"
+                className="fill-foreground font-semibold"
                 offset={8}
-                className="fill-foreground"
                 fontSize={12}
               />
             </Bar>

@@ -33,8 +33,8 @@ export default async function Home() {
 
   return (
     <Auth>
-      <div>
-        <RoomView>
+      <div className="w-full">
+        <RoomView className="w-full">
           <PollList room={room} />
         </RoomView>
       </div>

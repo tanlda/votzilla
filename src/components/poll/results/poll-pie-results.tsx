@@ -13,7 +13,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { PieChart, Pie, Cell, LabelList, Label } from 'recharts'
-import { PersonIcon } from '@radix-ui/react-icons'
 
 const chartConfig = {
   visitors: {

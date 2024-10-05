@@ -1,4 +1,4 @@
-import { StateCreator } from 'zustand'
+import {StateCreator} from 'zustand'
 
 type Account = {
   id: string
@@ -17,14 +17,13 @@ interface AuthSlice {
 }
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
-  account: { id: '' },
-  login: (credential) => {
-    // Do login
-    set({ account: { id: '1' } })
+  account: {id: ''},
+  login: () => {
+    set({account: {id: '1'}})
   },
-  signup: (credential) => {
-    // Do signup
-    set({ account: { id: '1' } })
+  signup: () => {
+    set({account: {id: '1'}})
   },
-  logout: () => {},
+  logout: () => {
+  },
 })

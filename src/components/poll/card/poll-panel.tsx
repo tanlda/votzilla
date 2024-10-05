@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 
 import { Poll, PollResults } from '@/types/poll'
-import { Button } from '@/components/ui/button'
 import { PollPieResults } from '@/components/poll/results/poll-pie-results'
 
 type Props = {
@@ -20,8 +19,6 @@ export const PollPanel: NextComponentType<object, object, Props> = ({
   poll,
   results,
 }) => {
-  const tags = (results?.tags || []).toSorted((a, b) => b.vote_count - a.vote_count)
-
   return (
     <div
       className={cn(

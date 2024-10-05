@@ -1,6 +1,10 @@
 name: pipeline
 
 on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
   workflow_dispatch:
 
 # Classic token: ### — admin:org, repo, workflow

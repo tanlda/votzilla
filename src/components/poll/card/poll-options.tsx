@@ -1,21 +1,20 @@
 'use client'
 
-import { NextComponentType } from 'next'
-import { cn } from '@/lib/utils'
+import {NextComponentType} from 'next'
+import {cn} from '@/lib/utils'
 import React from 'react'
 
-import { Bar, BarChart, LabelList, Rectangle, XAxis, YAxis } from 'recharts'
+import {Bar, BarChart, LabelList, XAxis, YAxis} from 'recharts'
 
-import { Checkbox } from '@/components/ui/checkbox'
+import {Checkbox} from '@/components/ui/checkbox'
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { FormControl, FormField, FormItem } from '@/components/ui/form'
-import { UseFormReturn } from 'react-hook-form'
+import {FormControl, FormField, FormItem} from '@/components/ui/form'
+import {UseFormReturn} from 'react-hook-form'
 import {
   Option,
   Poll,
@@ -28,25 +27,25 @@ import {
 type Props = {
   className?: string
   children?: React.ReactNode
-  form: UseFormReturn<any>
+  form: UseFormReturn
   poll: Poll
   self?: PollSelf
   results: PollResults
 }
 
 export const PollOptions: NextComponentType<object, object, Props> = ({
-  className,
-  form,
-  poll,
-  self,
-  results,
-}) => {
+                                                                        className,
+                                                                        form,
+                                                                        poll,
+                                                                        self,
+                                                                        results,
+                                                                      }) => {
   type Value = { poll: Option; result: PollResultsOption; self: PollSelfOption }
 
   const mapping: Record<string, Value> = {}
 
   for (const option of poll.options) {
-    mapping[option.id] = { poll: option } as Value
+    mapping[option.id] = {poll: option} as Value
   }
 
   for (const result of results.options) {
@@ -69,7 +68,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
     },
   }
 
-  const row = { width: 32, gap: 10, stroke: 1 }
+  const row = {width: 32, gap: 10, stroke: 1}
 
   return (
     <div className={cn(className, 'flex items-center justify-between')}>
@@ -79,7 +78,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
             key={option.id}
             control={form.control}
             name="options"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem className="h-8 w-8">
                 <FormControl>
                   <Checkbox
@@ -88,7 +87,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
                     onCheckedChange={() => {
                       return field.value?.map((o: Option) => o.id).includes(option.id)
                         ? field.onChange(field.value.filter((o: Option) => o.id !== option.id))
-                        : field.onChange([...field.value, { id: option.id, value: 1 }]) // TODO: value
+                        : field.onChange([...field.value, {id: option.id, value: 1}]) // TODO: value
                     }}
                     className={cn('h-8 w-8')}
                   />
@@ -111,7 +110,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
             accessibilityLayer
             data={chartData}
             layout="vertical"
-            margin={{ top: 0, right: 4, bottom: 0, left: 4 }}
+            margin={{top: 0, right: 4, bottom: 0, left: 4}}
             maxBarSize={row.width * 3}
             barSize={row.width}
             width={100}
@@ -126,9 +125,9 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
               includeHidden
               hide
             />
-            <XAxis dataKey="count" type="number" hide />
+            <XAxis dataKey="count" type="number" hide/>
             <ChartTooltip
-              content={<ChartTooltipContent indicator="line" />}
+              content={<ChartTooltipContent indicator="line"/>}
               animationDuration={200}
               isAnimationActive={false}
             />
@@ -138,8 +137,8 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
               fontSize={12}
               radius={4}
               fill={'#F4F4F5'}
-              background={{ fill: 'none', stroke: '#D4D4D8', radius: 4 }}
-              style={{ stroke: '#D4D4D8', strokeWidth: 1 }}
+              background={{fill: 'none', stroke: '#D4D4D8', radius: 4}}
+              style={{stroke: '#D4D4D8', strokeWidth: 1}}
             >
               <LabelList
                 dataKey="title"
@@ -147,7 +146,7 @@ export const PollOptions: NextComponentType<object, object, Props> = ({
                 className="font-medium"
                 offset={32}
                 fontSize={12}
-                content={({ index, x, y, value, height }) => {
+                content={({index, x, y, value, height}) => {
                   return (
                     <text
                       x={x}

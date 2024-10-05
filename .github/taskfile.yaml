@@ -1,0 +1,10 @@
+version: "3"
+
+tasks:
+  list:
+    cmds:
+      - cmd: act --list
+  
+  pipeline:
+    cmds:
+      - cmd: act -P arc-runner=catthehacker/ubuntu:act-latest --job replicate --secret-file .secrets

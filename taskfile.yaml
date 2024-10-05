@@ -1,5 +1,9 @@
 version: "3"
 
+includes:
+  act:
+    taskfile: .github/taskfile.yaml
+
 tasks:
   add:
     silent: true

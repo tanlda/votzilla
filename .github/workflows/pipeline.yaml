@@ -1,0 +1,34 @@
+name: pipeline
+
+on:
+  workflow_dispatch:
+
+# Classic token: ### — admin:org, repo, workflow
+# Update following below, at the destination repository
+# https://github.com/orgs/community/discussions/57244#discussioncomment-7780915
+permissions: write-all
+
+jobs:
+  replicate:
+    runs-on: arc-runner
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v4
+        with:
+          path: output
+          persist-credentials: false
+
+      - name: ⛑ Push Force
+        env:
+          USER: ${{ secrets.REPLICATED_USER }}
+          REPO: ${{ secrets.REPLICATED_REPO }}
+          TOKEN: ${{ secrets.REPLICATED_TOKEN }}  # classic
+          BRANCH: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          ls -a output
+          cd output
+          git config --global user.name runner
+          git config --global user.email runner@noreply.github.io
+          git remote set-url origin https://$TOKEN@github.com/$USER/$REPO.git
+          git push --set-upstream --force origin $BRANCH
